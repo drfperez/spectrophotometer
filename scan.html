@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wavelength to RGB Converter</title>
+    <style>
+      #color-box {
+        width: 100px;
+        height: 100px;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="color-box"></div>
+    <div id="result"></div>
+    <button id="start-btn" onclick="startScan()">Start Scan</button>
+    <button id="stop-btn" onclick="stopScan()">Stop Scan</button>
+    <button id="add-btn" onclick="addOne()">+1nm</button>
+    <script>
+      let wavelength = 380;
+      let timeoutId;
+      const colorBox = document.getElementById("color-box");
+      const resultBox = document.getElementById("result");
+
+      function startScan() {
+        if (timeoutId) {
+          // scan is already running, do nothing
+          return;
+        }
+        timeoutId = setInterval(scanWavelength, 10);
+      }
+
+      function stopScan() {
+        clearInterval(timeoutId);
+        timeoutId = null;
+      }
+
+      function scanWavelength() {
+        if (wavelength > 780) {
+          // reset wavelength to start a new scan
+          wavelength = 380;
+        }
+        const R = Math.round(getRGBValue(wavelength, 'R'));
+        const G = Math.round(getRGBValue(wavelength, 'G'));
+        const B = Math.round(getRGBValue(wavelength, 'B'));
+        const color = `rgb(${R}, ${G}, ${B})`;
+        colorBox.style.backgroundColor = color;
+        const result = `Wavelength: ${wavelength} nm, RGB values: (${R}, ${G}, ${B})`;
+        resultBox.textContent = result;
+        wavelength++;
+      }
+
+      function getRGBValue(wavelength, color) {
+        const gamma = 0.8;
+        const factor = 0.1;
+        let R, G, B;
+        const nm = parseFloat(wavelength);
+        if (nm < 380 || nm > 780) {
+          return 0;
+        }
+        if (nm >= 380 && nm < 440) {
+          R = -(nm - 440) / (440 - 380);
+          G = 0;
+          B = 1;
+        } else if (nm >= 440 && nm < 490) {
+          R = 0;
+          G = (nm - 440) / (490 - 440);
+          B = 1;
+        } else if (nm >= 490 && nm < 510) {
+          R = 0;
+          G = 1;
+          B = -(nm - 510) / (510 - 490);
+        } else if (nm >= 510 && nm < 580) {
+          R = (nm - 510) / (580 - 510);
+          G = 1;
+          B = 0;
+        } else if (nm >= 580 && nm < 645) {
+          R = 1;
+          G = -(nm - 645) / (645 - 580);
+          B = 0.0;
+        } else if (nm >= 645 && nm <= 780) {
+          R = Math.pow((780 - nm) / (780 - 645), gamma);
+          G = 0;
+          B = 0;
+        }
+        R = Math.round(R * 255);
+        G = Math.round(G * 255);
+        B = Math.round(B * 255);
+        if (color === 'R') {
+return R;
+} else if (color === 'G') {
+return G;
+} else if (color === 'B') {
+return B;
+}
+}
+
+  function addOne() {
+    wavelength++;
+    if (wavelength > 780) {
+      // reset wavelength to start a new scan
+      wavelength = 380;
+    }
+    const R = Math.round(getRGBValue(wavelength, 'R'));
+    const G = Math.round(getRGBValue(wavelength, 'G'));
+    const B = Math.round(getRGBValue(wavelength, 'B'));
+    const color = `rgb(${R}, ${G}, ${B})`;
+    colorBox.style.backgroundColor = color;
+    const result = `Wavelength: ${wavelength} nm, RGB values: (${R}, ${G}, ${B})`;
+    resultBox.textContent = result;
+  }
+</script>
+</body>
+</html>
