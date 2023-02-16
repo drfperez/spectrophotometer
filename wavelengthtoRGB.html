@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wavelength to RGB Converter</title>
+  </head>
+  <body>
+    <label for="wavelength">Wavelength (nm):</label>
+    <input type="number" id="wavelength" value="550" min="380" max="780">
+    <button onclick="convertWavelength()">Convert</button>
+    <br><br>
+    <div id="result"></div>
+    <script>
+      function convertWavelength() {
+        const wavelength = document.getElementById("wavelength").value;
+        const R = Math.round(getRGBValue(wavelength, 'R'));
+        const G = Math.round(getRGBValue(wavelength, 'G'));
+        const B = Math.round(getRGBValue(wavelength, 'B'));
+        const result = `RGB values: (${R}, ${G}, ${B})`;
+        document.getElementById("result").textContent = result;
+      }
+
+      function getRGBValue(wavelength, color) {
+        const gamma = 0.8;
+        const factor = 0.1;
+        let R, G, B;
+        const nm = parseFloat(wavelength);
+        if (nm < 380 || nm > 780) {
+          return 0;
+        }
+        if (nm >= 380 && nm < 440) {
+          R = -(nm - 440) / (440 - 380);
+          G = 0;
+          B = 1;
+        } else if (nm >= 440 && nm < 490) {
+          R = 0;
+          G = (nm - 440) / (490 - 440);
+          B = 1;
+        } else if (nm >= 490 && nm < 510) {
+          R = 0;
+          G = 1;
+          B = -(nm - 510) / (510 - 490);
+        } else if (nm >= 510 && nm < 580) {
+          R = (nm - 510) / (580 - 510);
+          G = 1;
+          B = 0;
+        } else if (nm >= 580 && nm < 645) {
+          R = 1;
+          G = -(nm - 645) / (645 - 580);
+          B = 0.0;
+        } else if (nm >= 645 && nm < 781) {
+          R = 1;
+          G = 0;
+          B = 0;
+        }
+        if (color === 'R') {
+          return 255 * Math.pow(R, gamma);
+        } else if (color === 'G') {
+          return 255 * Math.pow(G, gamma);
+        } else if (color === 'B') {
+          return 255 * Math.pow(B, gamma);
+        }
+      }
+    </script>
+  </body>
+</html>
