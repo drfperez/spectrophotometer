@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>256 Squares of Random Color</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		button {
+			font-size: 24px;
+			padding: 10px 20px;
+			margin: 20px;
+		}
+		#buttons {
+			text-align: center;
+		}
+		.square {
+			width: calc(100% / 16);
+			height: calc(100% / 16);
+			display: inline-block;
+			margin: 0;
+			padding: 0;
+			position: relative;
+			box-sizing: border-box;
+		}
+		.number {
+			position: absolute;
+			top: -25px;
+			left: 0;
+			width: 20px;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			font-size: 12px;
+			color: white;
+		}
+
+		/* Full-screen layout for squares */
+		#squares {
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-wrap: wrap;
+			height: 100vh;
+		}
+	</style>
+</head>
+<body>
+	<div id="buttons">
+		<button id="redButton">Reds</button>
+		<button id="greenButton">Greens</button>
+		<button id="blueButton">Blues</button>
+	</div>
+	<div id="squares">
+	</div>
+	<script>
+		var redButton = document.getElementById('redButton');
+		var greenButton = document.getElementById('greenButton');
+		var blueButton = document.getElementById('blueButton');
+		var squares = document.getElementById('squares');
+
+		redButton.onclick = function() {
+			createSquares('red');
+		};
+
+		greenButton.onclick = function() {
+			createSquares('green');
+		};
+
+		blueButton.onclick = function() {
+			createSquares('blue');
+		};
+
+function createSquares(color) {
+    squares.innerHTML = '';
+    for (var i = 0; i < 256; i++) {
+        var value = Math.floor(Math.random() * 256);
+        var square = document.createElement('div');
+        square.classList.add('square');
+        if (color === 'red') {
+            square.style.backgroundColor = 'rgb(' + value + ', 0, 0)';
+        } else if (color === 'green') {
+            square.style.backgroundColor = 'rgb(0, ' + value + ', 0)';
+        } else if (color === 'blue') {
+            square.style.backgroundColor = 'rgb(0, 0, ' + value + ')';
+        }
+        // Attach the event listener to all squares
+        square.addEventListener('click', function() {
+            var number = this.querySelector('.number');
+            if (!number) {
+                number = document.createElement('div');
+                number.classList.add('number');
+                this.appendChild(number);
+            }
+            var colorValue = this.style.backgroundColor.split(',');
+            var colorNumber;
+            if (color === 'red') {
+                colorNumber = parseInt(colorValue[0].split('(')[1]);
+            } else if (color === 'green') {
+                colorNumber = parseInt(colorValue[1]);
+            } else if (color === 'blue') {
+                colorNumber = parseInt(colorValue[2].split(')')[0]);
+            }
+            if (isNaN(colorNumber)) {
+                colorNumber = 0;
+            }
+            number.textContent = colorNumber;
+        });
+        squares.appendChild(square);
+    }
+}
+
+
+
+	</script>
+</body>
+</html>
