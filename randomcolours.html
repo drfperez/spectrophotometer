@@ -73,32 +73,38 @@
 		};
 
 		function createSquares(color) {
-		    squares.innerHTML = '';
-		    for (var i = 0; i < 256; i++) {
-		        var value = Math.floor(Math.random() * 256);
-		        var square = document.createElement('div');
-		        square.classList.add('square');
-		        if (color === 'red') {
-		            square.style.backgroundColor = 'rgb(' + value + ', 0, 0)';
-		        } else if (color === 'green') {
-		            square.style.backgroundColor = 'rgb(0, ' + value + ', 0)';
-		        } else if (color === 'blue') {
-		            square.style.backgroundColor = 'rgb(0, 0, ' + value + ')';
-		        }
-		        // Attach the event listener to all squares
-		        square.addEventListener('click', function() {
-		            var number = this.querySelector('.number');
-		            if (!number) {
-		                number = document.createElement('div');
-		                number.classList.add('number');
-		                this.appendChild(number);
-		            }
-		            var colorNumber = getColorValue(this, color);
-		            number.textContent = colorNumber;
-		        });
-		        squares.appendChild(square);
-		    }
-		}
+    squares.innerHTML = '';
+    var usedValues = []; // array to store used color values
+    for (var i = 0; i < 256; i++) {
+        var value;
+        do {
+            value = Math.floor(Math.random() * 256);
+        } while (usedValues.includes(value)); // generate a new value if it's already used
+        usedValues.push(value);
+        var square = document.createElement('div');
+        square.classList.add('square');
+        if (color === 'red') {
+            square.style.backgroundColor = 'rgb(' + value + ', 0, 0)';
+        } else if (color === 'green') {
+            square.style.backgroundColor = 'rgb(0, ' + value + ', 0)';
+        } else if (color === 'blue') {
+            square.style.backgroundColor = 'rgb(0, 0, ' + value + ')';
+        }
+        // Attach the event listener to all squares
+        square.addEventListener('click', function() {
+            var number = this.querySelector('.number');
+            if (!number) {
+                number = document.createElement('div');
+                number.classList.add('number');
+                this.appendChild(number);
+            }
+            var colorNumber = getColorValue(this, color);
+            number.textContent = colorNumber;
+        });
+        squares.appendChild(square);
+    }
+}
+
 
 function getColorValues(element) {
   var style = window.getComputedStyle(element);
