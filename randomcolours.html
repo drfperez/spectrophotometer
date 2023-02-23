@@ -72,23 +72,33 @@
 			createSquares('blue');
 		};
 
-		function createSquares(color) {
+function createSquares(color) {
     squares.innerHTML = '';
-    var usedValues = []; // array to store used color values
+    var usedRedValues = []; // array to store used red values
+    var usedGreenValues = []; // array to store used green values
+    var usedBlueValues = []; // array to store used blue values
     for (var i = 0; i < 256; i++) {
-        var value;
+        var redValue, greenValue, blueValue;
         do {
-            value = Math.floor(Math.random() * 256);
-        } while (usedValues.includes(value)); // generate a new value if it's already used
-        usedValues.push(value);
+            redValue = Math.floor(Math.random() * 256);
+        } while (usedRedValues.includes(redValue)); // generate a new red value if it's already used
+        usedRedValues.push(redValue);
+        do {
+            greenValue = Math.floor(Math.random() * 256);
+        } while (usedGreenValues.includes(greenValue)); // generate a new green value if it's already used
+        usedGreenValues.push(greenValue);
+        do {
+            blueValue = Math.floor(Math.random() * 256);
+        } while (usedBlueValues.includes(blueValue)); // generate a new blue value if it's already used
+        usedBlueValues.push(blueValue);
         var square = document.createElement('div');
         square.classList.add('square');
         if (color === 'red') {
-            square.style.backgroundColor = 'rgb(' + value + ', 0, 0)';
+            square.style.backgroundColor = 'rgb(' + redValue + ', 0, 0)';
         } else if (color === 'green') {
-            square.style.backgroundColor = 'rgb(0, ' + value + ', 0)';
+            square.style.backgroundColor = 'rgb(0, ' + greenValue + ', 0)';
         } else if (color === 'blue') {
-            square.style.backgroundColor = 'rgb(0, 0, ' + value + ')';
+            square.style.backgroundColor = 'rgb(0, 0, ' + blueValue + ')';
         }
         // Attach the event listener to all squares
         square.addEventListener('click', function() {
@@ -104,6 +114,7 @@
         squares.appendChild(square);
     }
 }
+
 
 
 function getColorValues(element) {
